@@ -32,7 +32,7 @@ public class MecanumDrive {
 
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD);
 
         imu.initialize(new IMU.Parameters(RevOrientation ));
 
@@ -41,8 +41,8 @@ public class MecanumDrive {
     public void drive(double forward, double strafe, double rotate){
         double frontLeftPower = forward + strafe + rotate;
         double backLeftPower = forward - strafe + rotate;
-        double frontRightPower = forward - strafe + rotate;
-        double backRightPower = forward + strafe + rotate;
+        double frontRightPower = forward - strafe - rotate;
+        double backRightPower = forward + strafe - rotate;
 
         double maxPower = 1.0;
         double maxSpeed = 1.0;
@@ -68,7 +68,7 @@ public class MecanumDrive {
         theta = AngleUnit.normalizeRadians(theta -
                 imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
 
-        double newForward = r * Math.sin(theta );
+        double newForward = r * Math.sin(theta ); //
         double newStrafe = r * Math.cos(theta);
 
         this.drive(newForward,newStrafe,rotate);

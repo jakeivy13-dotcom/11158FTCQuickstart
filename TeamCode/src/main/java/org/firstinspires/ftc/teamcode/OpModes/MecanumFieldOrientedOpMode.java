@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.MecanumDrive;
 
+@TeleOp(name = "Mecanum Field Oriented")
 public class MecanumFieldOrientedOpMode extends OpMode {
 
     MecanumDrive drive = new MecanumDrive();
@@ -19,7 +21,7 @@ public class MecanumFieldOrientedOpMode extends OpMode {
     @Override
     public void loop() {
 
-        forward = gamepad1.left_stick_y;
+        forward = -gamepad1.left_stick_y;
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
 
