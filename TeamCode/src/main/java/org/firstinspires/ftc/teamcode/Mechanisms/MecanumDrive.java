@@ -15,10 +15,14 @@ public class MecanumDrive {
     private IMU imu;
 
     public void init(HardwareMap hwMap){
-        frontLeftMotor = hwMap.get(DcMotor.class,"front_left_motor");
-        backLeftMotor = hwMap.get(DcMotor.class,"back_left_motor");
-        frontRightMotor = hwMap.get(DcMotor.class,"front_right_motor");
-        backRightMotor = hwMap.get(DcMotor.class,"back_right_motor");
+        //Connected to Port 0
+        frontLeftMotor = hwMap.get(DcMotor.class,"FLmotor");
+        //Connected to Port 1
+        backLeftMotor = hwMap.get(DcMotor.class,"BLmotor");
+        //Connected to Port 2
+        frontRightMotor = hwMap.get(DcMotor.class,"FRmotor");
+        //Connected to Port 3
+        backRightMotor = hwMap.get(DcMotor.class,"BRmotor");
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -29,7 +33,7 @@ public class MecanumDrive {
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        imu = hwMap.get(IMU.class,"IMU");
+        imu = hwMap.get(IMU.class,"Imu");
 
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
