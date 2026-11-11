@@ -66,7 +66,8 @@ public class OTOSTuner extends Procedure {
 
 }
 
-class OTOSLinearScalar extends TuningOpMode<Double> {
+class
+OTOSLinearScalar extends TuningOpMode<Double> {
     String name;
     double distance;
 

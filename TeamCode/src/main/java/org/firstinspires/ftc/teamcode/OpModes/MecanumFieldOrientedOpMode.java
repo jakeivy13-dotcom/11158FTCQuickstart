@@ -25,7 +25,11 @@ public class MecanumFieldOrientedOpMode extends OpMode {
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
 
+        double s = gamepad2.left_stick_x;
+
+
         drive.driveFieldRelative(forward,strafe,rotate);
+        drive.x(s);
 
     }
 }

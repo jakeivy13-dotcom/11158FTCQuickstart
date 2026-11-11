@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.Mechanisms;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -11,8 +13,10 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class MecanumDrive {
-    private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor;
+    private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor, fastMotor;
     private IMU imu;
+    private DcMotorEx encoder;
+
 
     public void init(HardwareMap hwMap){
         //Connected to Port 3
@@ -23,6 +27,13 @@ public class MecanumDrive {
         frontRightMotor = hwMap.get(DcMotor.class,"FRmotor");
         //Connected to Port 0
         backRightMotor = hwMap.get(DcMotor.class,"BRmotor");
+        encoder = hwMap.get(DcMotorEx.class,"smh");
+
+        fastMotor = hwMap.get(DcMotorEx.class,"outtake");
+
+        encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        encoder.getCurrentPosition();
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -33,6 +44,7 @@ public class MecanumDrive {
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fastMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         imu = hwMap.get(IMU.class,"Imu");
 
@@ -86,6 +98,12 @@ public class MecanumDrive {
         double newStrafe = r * Math.cos(theta);
 
         this.drive(newForward,newStrafe,rotate);
+
+    }
+
+
+    public void x(double s){
+        fastMotor.setPower(s);
 
     }
 
