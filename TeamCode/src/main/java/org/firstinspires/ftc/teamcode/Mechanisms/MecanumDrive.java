@@ -47,12 +47,12 @@ public class MecanumDrive {
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fastMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slowMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fastMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slowMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         imu = hwMap.get(IMU.class,"Imu");
 
@@ -66,12 +66,6 @@ public class MecanumDrive {
 
     public void drive(double forward, double strafe, double rotate){
 
-        if (forward > 0.3 || forward < -0.3){
-            strafe = 0;
-        }
-        else {
-            forward = 0;
-        }
 
         double frontLeftPower = forward + strafe + rotate;
         double backLeftPower = forward - strafe + rotate;
@@ -87,7 +81,9 @@ public class MecanumDrive {
         maxPower = Math.max(maxPower, Math.abs(backRightPower));
 
         frontLeftMotor.setPower(maxSpeed * (frontLeftPower/maxPower));
-
+        backLeftMotor.setPower(maxSpeed * (backLeftPower/maxPower));
+        frontRightMotor.setPower(maxSpeed * (frontRightPower/maxPower));
+        backRightMotor.setPower(maxSpeed * (backRightPower/maxPower));
 
 
     }
