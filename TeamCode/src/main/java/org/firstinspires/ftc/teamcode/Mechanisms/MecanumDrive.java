@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class MecanumDrive {
-    private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor, fastMotor;
+    private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor, fastMotor, slowMotor;
     private IMU imu;
     private DcMotorEx encoder;
 
@@ -27,13 +27,20 @@ public class MecanumDrive {
         frontRightMotor = hwMap.get(DcMotor.class,"FRmotor");
         //Connected to Port 0
         backRightMotor = hwMap.get(DcMotor.class,"BRmotor");
-        encoder = hwMap.get(DcMotorEx.class,"smh");
+
+        fastMotor = hwMap.get(DcMotor.class,"outtake");
+
+        slowMotor = hwMap.get(DcMotor.class,"intake");
+
+
+
+        //encoder = hwMap.get(DcMotorEx.class,"smh");
 
 //        fastMotor = hwMap.get(DcMotorEx.class,"outtake");
 
-        encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        encoder.getCurrentPosition();
+       // encoder.getCurrentPosition();
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -44,12 +51,13 @@ public class MecanumDrive {
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        fastMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fastMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slowMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         imu = hwMap.get(IMU.class,"Imu");
 
         RevHubOrientationOnRobot RevOrientation = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
 
         imu.initialize(new IMU.Parameters(RevOrientation ));
@@ -79,9 +87,7 @@ public class MecanumDrive {
         maxPower = Math.max(maxPower, Math.abs(backRightPower));
 
         frontLeftMotor.setPower(maxSpeed * (frontLeftPower/maxPower));
-//        backLeftMotor.setPower(maxSpeed * (backLeftPower/maxPower));
-//        frontRightMotor.setPower(maxSpeed * (frontRightPower/maxPower));
-//        backRightMotor.setPower(maxSpeed * (backRightPower/maxPower));
+
 
 
     }
@@ -103,8 +109,17 @@ public class MecanumDrive {
 
 
     public void x(double s){
-//        fastMotor.setPower(s);
+       fastMotor.setPower(s);
 
     }
 
-}
+    public void i(double t){
+        slowMotor.setPower(t);
+    }
+
+
+   }
+
+
+
+
