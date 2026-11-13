@@ -17,7 +17,6 @@ public class MecanumFieldOrientedOpMode extends OpMode {
         drive.init(hardwareMap);
 
     }
-    double r = 1;
 
 
     @Override
@@ -27,25 +26,14 @@ public class MecanumFieldOrientedOpMode extends OpMode {
         strafe = gamepad1.right_stick_x;
         rotate = (gamepad1.right_bumper ? 0:1 ) + (gamepad1.left_bumper ? 0:-1) ;
 
-        double s = gamepad2.left_stick_x;
-        double t = gamepad2.right_stick_y;
-
-        if (gamepad2.leftBumperWasPressed()){
-            r -= .1;
-        }
-        if (gamepad2.rightBumperWasPressed()){
-            r += .1;
-        }
 
 
 
         drive.driveFieldRelative(forward,strafe,rotate);
-        drive.x(s);
-        drive.i(t*r);
+        drive.driveOuttake(gamepad2.left_stick_y);
+        drive.driveIntake(gamepad2.right_stick_y);
 
-        telemetry.clearAll();
-        telemetry.addData("Intake Speed( Bumpers to change the speed) (Right Joystick to move it)", r);
-        telemetry.update();
+
 
 
 

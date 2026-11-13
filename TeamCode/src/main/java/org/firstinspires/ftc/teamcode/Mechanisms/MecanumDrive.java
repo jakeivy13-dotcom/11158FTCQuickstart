@@ -1,19 +1,16 @@
 package org.firstinspires.ftc.teamcode.Mechanisms;
 
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class MecanumDrive {
-    private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor, fastMotor, slowMotor;
+    private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor, outtakeMotor, intakeMotor;
     private IMU imu;
     private DcMotorEx encoder;
 
@@ -28,9 +25,9 @@ public class MecanumDrive {
         //Connected to Port 0
         backRightMotor = hwMap.get(DcMotor.class,"BRmotor");
 
-        fastMotor = hwMap.get(DcMotor.class,"outtake");
+        outtakeMotor = hwMap.get(DcMotor.class,"outtake");
 
-        slowMotor = hwMap.get(DcMotor.class,"intake");
+        intakeMotor = hwMap.get(DcMotor.class,"intake");
 
 
 
@@ -51,8 +48,8 @@ public class MecanumDrive {
         backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fastMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slowMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        outtakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         imu = hwMap.get(IMU.class,"Imu");
 
@@ -104,13 +101,13 @@ public class MecanumDrive {
     }
 
 
-    public void x(double s){
-       fastMotor.setPower(s);
+    public void driveOuttake(double power){
+       outtakeMotor.setPower(power);
 
     }
 
-    public void i(double t){
-        slowMotor.setPower(t);
+    public void driveIntake(double power){
+        intakeMotor.setPower(power);
     }
 
 
