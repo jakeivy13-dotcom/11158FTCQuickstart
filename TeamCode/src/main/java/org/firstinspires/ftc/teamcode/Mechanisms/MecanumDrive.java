@@ -4,11 +4,13 @@ package org.firstinspires.ftc.teamcode.Mechanisms;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -16,6 +18,7 @@ public class MecanumDrive {
     private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor, fastMotor, slowMotor;
     private IMU imu;
     private DcMotorEx encoder;
+    private Servo servo;
 
 
     public void init(HardwareMap hwMap){
@@ -27,6 +30,8 @@ public class MecanumDrive {
         frontRightMotor = hwMap.get(DcMotor.class,"FRmotor");
         //Connected to Port 0
         backRightMotor = hwMap.get(DcMotor.class,"BRmotor");
+
+        servo = hwMap.get(Servo.class,"servo");
 
         fastMotor = hwMap.get(DcMotor.class,"outtake");
 
@@ -111,6 +116,11 @@ public class MecanumDrive {
 
     public void i(double t){
         slowMotor.setPower(t);
+    }
+
+    public void setPosServo(double postion){
+
+        servo.setPosition(postion);
     }
 
 

@@ -17,7 +17,8 @@ public class MecanumFieldOrientedOpMode extends OpMode {
         drive.init(hardwareMap);
 
     }
-    double r = 1;
+    double r = .82;
+    boolean servoGateState = true;
 
 
     @Override
@@ -31,17 +32,22 @@ public class MecanumFieldOrientedOpMode extends OpMode {
         double t = gamepad2.right_stick_y;
 
         if (gamepad2.leftBumperWasPressed()){
-            r -= .1;
+            r -= .02;
         }
         if (gamepad2.rightBumperWasPressed()){
-            r += .1;
+            r += .02;
         }
 
+        if (servoGateState && gamepad2.aWasPressed()){
+            drive.setPosServo(150);
+        } else if (!servoGateState && gamepad2.aWasPressed()) {
+            drive.setPosServo(0);
+        }
 
 
         drive.driveFieldRelative(forward,strafe,rotate);
-        drive.x(s);
-        drive.i(t*r);
+        drive.x(s*r);
+        drive.i(t);
 
         telemetry.clearAll();
         telemetry.addData("Intake Speed( Bumpers to change the speed) (Right Joystick to move it)", r);
