@@ -1,4 +1,7 @@
-package org.firstinspires.ftc.teamcode.Mechanisms;
+
+        package org.firstinspires.ftc.teamcode.Mechanisms;
+
+
 
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -11,17 +14,26 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class MecanumDrive {
-    private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor, fastMotor, slowMotor;
+    private DcMotor frontLeftMotor, backLeftMotor,frontRightMotor,backRightMotor, outtakeMotor, intakeMotor ;
     private IMU imu;
     private DcMotorEx encoder;
+
     private Servo servo;
+
+    private CRServo turretServo;
+    ElapsedTime runtime = new ElapsedTime();
+
+
+
 
 
     public void init(HardwareMap hwMap){
+
         //Connected to Port 3
         frontLeftMotor = hwMap.get(DcMotor.class,"FLmotor");
         //Connected to Port 1
@@ -31,11 +43,17 @@ public class MecanumDrive {
         //Connected to Port 0
         backRightMotor = hwMap.get(DcMotor.class,"BRmotor");
 
+        outtakeMotor = hwMap.get(DcMotor.class,"outtake");
+
+        intakeMotor = hwMap.get(DcMotor.class,"intake");
+
         servo = hwMap.get(Servo.class,"servo");
 
-        fastMotor = hwMap.get(DcMotor.class,"outtake");
+        turretServo = hwMap.get(CRServo.class,"turretservo");
 
-        slowMotor = hwMap.get(DcMotor.class,"intake");
+
+
+
 
 
 
@@ -45,19 +63,23 @@ public class MecanumDrive {
 
         //encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-       // encoder.getCurrentPosition();
+        // encoder.getCurrentPosition();
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+
+
 
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fastMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slowMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        outtakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
         imu = hwMap.get(IMU.class,"Imu");
 
@@ -72,13 +94,13 @@ public class MecanumDrive {
     public void drive(double forward, double strafe, double rotate){
 
 
-        double frontLeftPower = forward + strafe + rotate;
-        double backLeftPower = forward - strafe + rotate;
-        double frontRightPower = forward - strafe - rotate;
-        double backRightPower = forward + strafe - rotate;
+        double frontLeftPower = forward + strafe - rotate;
+        double backLeftPower = (forward - strafe + rotate);
+        double frontRightPower = (forward - strafe - rotate);
+        double backRightPower = forward + strafe + rotate;
 
         double maxPower = 1;
-        double maxSpeed = 1;
+        double maxSpeed = .8;
 
         maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
         maxPower = Math.max(maxPower, Math.abs(backLeftPower));
@@ -109,22 +131,47 @@ public class MecanumDrive {
     }
 
 
-    public void x(double s){
-       fastMotor.setPower(s);
+
+        public void driveOuttake(double power){
+            outtakeMotor.setPower(power);
+
+        }
+
+
+        public void driveIntake(double power){
+                intakeMotor.setPower(power);
+            }
+
+            public void setPosServo(double position){
+                servo.setPosition(position);
+            }
+
+            public double getServoPos(){
+                double x = servo.getPosition();
+                return x;
+            }
+
+            public void setContServo(double speed){
+                turretServo.setPower(speed);
+            }
+
+            public void sleep(double time){
+                runtime.reset();
+                while (runtime.milliseconds() < time){
+                    runtime.milliseconds();
+            }
 
     }
 
-    public void i(double t){
-        slowMotor.setPower(t);
-    }
-
-    public void setPosServo(double postion){
-
-        servo.setPosition(postion);
-    }
+       /* public void forward(double forward){
 
 
-   }
+
+     }*/
+
+
+
+        }
 
 
 
