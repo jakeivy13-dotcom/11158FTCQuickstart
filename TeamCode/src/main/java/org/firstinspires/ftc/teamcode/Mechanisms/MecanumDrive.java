@@ -4,13 +4,10 @@
 
 
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -51,20 +48,6 @@ public class MecanumDrive {
 
         turretServo = hwMap.get(CRServo.class,"turretservo");
 
-
-
-
-
-
-
-        //encoder = hwMap.get(DcMotorEx.class,"smh");
-
-//        fastMotor = hwMap.get(DcMotorEx.class,"outtake");
-
-        //encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // encoder.getCurrentPosition();
-
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -91,16 +74,24 @@ public class MecanumDrive {
 
     }
 
+    // Methods---------------------------------------------------
+
+    public void sleep(double time) {
+        runtime.reset();
+        while (runtime.milliseconds() < time) {
+            runtime.milliseconds();
+        }
+    }
+
     public void drive(double forward, double strafe, double rotate){
 
-
         double frontLeftPower = forward + strafe - rotate;
-        double backLeftPower = (forward - strafe + rotate);
-        double frontRightPower = (forward - strafe - rotate);
+        double backLeftPower = forward - strafe + rotate;
+        double frontRightPower = forward - strafe - rotate;
         double backRightPower = forward + strafe + rotate;
 
         double maxPower = 1;
-        double maxSpeed = .8;
+        double maxSpeed = 1;
 
         maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
         maxPower = Math.max(maxPower, Math.abs(backLeftPower));
@@ -111,7 +102,6 @@ public class MecanumDrive {
         backLeftMotor.setPower(maxSpeed * (backLeftPower/maxPower));
         frontRightMotor.setPower(maxSpeed * (frontRightPower/maxPower));
         backRightMotor.setPower(maxSpeed * (backRightPower/maxPower));
-
 
     }
 
@@ -130,48 +120,47 @@ public class MecanumDrive {
 
     }
 
-
-
-        public void driveOuttake(double power){
-            outtakeMotor.setPower(power);
-
+    public void driveOuttake(double power){
+        outtakeMotor.setPower(power);
         }
-
-
-        public void driveIntake(double power){
-                intakeMotor.setPower(power);
-            }
-
-            public void setPosServo(double position){
-                servo.setPosition(position);
-            }
-
-            public double getServoPos(){
-                double x = servo.getPosition();
-                return x;
-            }
-
-            public void setContServo(double speed){
-                turretServo.setPower(speed);
-            }
-
-            public void sleep(double time){
-                runtime.reset();
-                while (runtime.milliseconds() < time){
-                    runtime.milliseconds();
-            }
-
+    public void driveIntake(double power){
+            intakeMotor.setPower(power);
+        }
+    public void setPosServo(double position){
+        servo.setPosition(position);
+        }
+    public void driveContServo(double power){
+        turretServo.setPower(power);
     }
 
-       /* public void forward(double forward){
+    public double getServoPos(){ return servo.getPosition(); }
 
-
-
-     }*/
-
-
-
+    public String toString(){
+        try {
+            return String.format(
+                    "=== MecanumDrive Status ===\n" +
+                            "--- Drive Motors (Port | Pwr | Pos | Busy?) ---\n" +
+                            "FL (Port %d): Pwr=%.2f | Pos=%d | Busy=%b \n" +
+                            "BL (Port %d): Pwr=%.2f | Pos=%d | Busy=%b \n" +
+                            "FR (Port %d): Pwr=%.2f | Pos=%d | Busy=%b \n" +
+                            "BR (Port %d): Pwr=%.2f | Pos=%d | Busy=%b \n" +
+                            "--- Other Motors and Servos ---\n" +
+                            "Intake  (Port %d): Pwr=%.2f | Busy=%b \n" +
+                            "Outtake (Port %d): Pwr=%.2f | Busy=%b \n" +
+                            "Servo   (Port %d): Pos=%.2f | \n",
+                    frontLeftMotor.getPortNumber(), frontLeftMotor.getPower(), frontLeftMotor.getCurrentPosition(), frontLeftMotor.isBusy(),
+                    backLeftMotor.getPortNumber(), backLeftMotor.getPower(), backLeftMotor.getCurrentPosition(), backLeftMotor.isBusy(),
+                    frontRightMotor.getPortNumber(), frontRightMotor.getPower(), frontRightMotor.getCurrentPosition(), frontRightMotor.isBusy(),
+                    backRightMotor.getPortNumber(), backRightMotor.getPower(), backRightMotor.getCurrentPosition(), backRightMotor.isBusy(),
+                    intakeMotor.getPortNumber(), intakeMotor.getPower(), intakeMotor.isBusy(),
+                    outtakeMotor.getPortNumber(), outtakeMotor.getPower(), outtakeMotor.isBusy(),
+                    servo.getPortNumber(), servo.getPosition()
+            );
+        } catch (Exception e) {
+            return String.format("Error: %S", e );
         }
+    }
+}
 
 
 
